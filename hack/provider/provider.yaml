@@ -1,0 +1,36 @@
+name: multipass
+version: ##VERSION##
+description: |-
+  DevPod on Canonical Multipass
+icon: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+iconDark: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+binaries:
+  MULTIPASS_PROVIDER:
+    - os: linux
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-amd64
+      checksum: ##CHECKSUM_LINUX_AMD64##
+    - os: linux
+      arch: arm64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-arm64
+      checksum: ##CHECKSUM_LINUX_ARM64##
+    - os: darwin
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-darwin-amd64
+      checksum: ##CHECKSUM_DARWIN_AMD64##
+    - os: darwin
+      arch: arm64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-darwin-arm64
+      checksum: ##CHECKSUM_DARWIN_ARM64##
+    - os: windows
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-windows-amd64.exe
+      checksum: ##CHECKSUM_WINDOWS_AMD64##
+exec:
+  init: ${MULTIPASS_PROVIDER} init
+  command: ${MULTIPASS_PROVIDER} command
+  create: ${MULTIPASS_PROVIDER} create
+  delete: ${MULTIPASS_PROVIDER} delete
+  start: ${MULTIPASS_PROVIDER} start
+  stop: ${MULTIPASS_PROVIDER} stop
+  status: ${MULTIPASS_PROVIDER} status

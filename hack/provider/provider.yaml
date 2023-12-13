@@ -4,6 +4,63 @@ description: |-
   DevPod on Canonical Multipass
 icon: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
 iconDark: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+optionGroups:
+  - options:
+      - MULTIPASS_CPUS
+      - MULTIPASS_DISK
+      - MULTIPASS_MEMORY
+      - MULTIPASS_NAME
+    name: "Multipass options"
+    defaultVisible: true
+  - options:
+      - AGENT_PATH
+      - INACTIVITY_TIMEOUT
+      - INJECT_DOCKER_CREDENTIALS
+      - INJECT_GIT_CREDENTIALS
+    name: "Agent options"
+    defaultVisible: false
+options:
+  MULTIPASS_CPUS:
+    description: Number of CPUs to allocate.
+    default: 1
+  MULTIPASS_DISK:
+    description: Disk space to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 512M.
+    default: 5G
+  MULTIPASS_MEMORY:
+    description: mount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
+    default: 1G
+  MULTIPASS_NAME:
+    description: Name for the instance.
+  INACTIVITY_TIMEOUT:
+    description: If defined, will automatically stop the VM after the inactivity period.
+    default: 10m
+  INJECT_GIT_CREDENTIALS:
+    description: "If DevPod should inject git credentials into the remote host."
+    default: "true"
+  INJECT_DOCKER_CREDENTIALS:
+    description: "If DevPod should inject docker credentials into the remote host."
+    default: "true"
+  AGENT_PATH:
+    description: The path where to inject the DevPod agent to.
+    default: /home/ubuntu/.devpod/devpod
+agent:
+  path: ${AGENT_PATH}
+  inactivityTimeout: ${INACTIVITY_TIMEOUT}
+  injectGitCredentials: ${INJECT_GIT_CREDENTIALS}
+  injectDockerCredentials: ${INJECT_DOCKER_CREDENTIALS}
+  binaries:
+    MULTIPASS_PROVIDER:
+      - os: linux
+        arch: amd64
+        path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-amd64
+        checksum: ##CHECKSUM_LINUX_AMD64##
+      - os: linux
+        arch: arm64
+        path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-arm64
+        checksum: ##CHECKSUM_LINUX_ARM64##
+  exec:
+    shutdown: |-
+      ${MULTIPASS_PROVIDER} stop
 binaries:
   MULTIPASS_PROVIDER:
     - os: linux

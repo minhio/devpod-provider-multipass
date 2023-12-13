@@ -23,14 +23,18 @@ options:
   MULTIPASS_CPUS:
     description: Number of CPUs to allocate.
     default: 1
+    local: true
   MULTIPASS_DISK:
     description: Disk space to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 512M.
     default: 5G
+    local: true
   MULTIPASS_MEMORY:
     description: mount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
     default: 1G
+    local: true
   MULTIPASS_NAME:
     description: Name for the instance.
+    local: true
   INACTIVITY_TIMEOUT:
     description: If defined, will automatically stop the VM after the inactivity period.
     default: 10m

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/loft-sh/devpod/pkg/provider"
 )
 
 const (
@@ -12,17 +14,9 @@ const (
 	MULTIPASS_CPUS      = "MULTIPASS_CPUS"
 	MULTIPASS_DISK_SIZE = "MULTIPASS_DISK_SIZE"
 	MULTIPASS_MEMORY    = "MULTIPASS_MEMORY"
-
-	DEVPOD           = "DEVPOD"
-	DEVPOD_OS        = "DEVPOD_OS"
-	DEVPOD_ARCH      = "DEVPOD_ARCH"
-	MACHINE_ID       = "MACHINE_ID"
-	MACHINE_FOLDER   = "MACHINE_FOLDER"
-	MACHINE_CONTEXT  = "MACHINE_CONTEXT"
-	MACHINE_PROVIDER = "MACHINE_PROVIDER"
 )
 
-type MultipassOptions struct {
+type Options struct {
 	Path     string
 	Image    string
 	Cpus     int
@@ -30,18 +24,8 @@ type MultipassOptions struct {
 	Memory   int
 }
 
-type DevPodOptions struct {
-	DevPodCliPath   string
-	DevPodOs        string
-	DevPodArch      string
-	MachineId       string
-	MachineFolder   string
-	MachineContext  string
-	MachineProvider string
-}
-
-func MultipassOptionsFromEnv() (*MultipassOptions, error) {
-	multipassOptions := &MultipassOptions{}
+func FromEnv() (*Options, error) {
+	multipassOptions := &Options{}
 
 	var err error
 
@@ -88,47 +72,9 @@ func MultipassOptionsFromEnv() (*MultipassOptions, error) {
 	return multipassOptions, nil
 }
 
-func DevPodOptionsFromEnv() (*DevPodOptions, error) {
-	devPodOptions := &DevPodOptions{}
-
-	var err error
-
-	devPodOptions.DevPodCliPath, err = fromEnvOrError(DEVPOD)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.DevPodOs, err = fromEnvOrError(DEVPOD_OS)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.DevPodArch, err = fromEnvOrError(DEVPOD_ARCH)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.MachineId, err = fromEnvOrError(MACHINE_ID)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.MachineFolder, err = fromEnvOrError(MACHINE_FOLDER)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.MachineContext, err = fromEnvOrError(MACHINE_CONTEXT)
-	if err != nil {
-		return nil, err
-	}
-
-	devPodOptions.MachineProvider, err = fromEnvOrError(MACHINE_PROVIDER)
-	if err != nil {
-		return nil, err
-	}
-
-	return devPodOptions, nil
+func (multipassOptions *Options) GetMachineId() string {
+	machine := provider.FromEnvironment()
+	return "devpod-" + machine.ID
 }
 
 func fromEnvOrError(name string) (string, error) {

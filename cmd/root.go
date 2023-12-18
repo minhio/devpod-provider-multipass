@@ -6,7 +6,6 @@ import (
 
 	"github.com/loft-sh/log"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -28,9 +27,6 @@ func Execute() {
 	// execute command
 	err := rootCmd.Execute()
 	if err != nil {
-		if exitErr, ok := err.(*ssh.ExitError); ok {
-			os.Exit(exitErr.ExitStatus())
-		}
 		if exitErr, ok := err.(*exec.ExitError); ok {
 			if len(exitErr.Stderr) > 0 {
 				log.Default.ErrorStreamOnly().Error(string(exitErr.Stderr))

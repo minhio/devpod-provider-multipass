@@ -24,6 +24,9 @@ func Command() error {
 
 	cmd := exec.Command(opts.Path, "exec", machineId, "--", devPodCommand)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -41,7 +44,6 @@ func Create() error {
 	machineId := opts.GetMachineId()
 
 	cmd := exec.Command(opts.Path, "launch",
-		"--image", opts.Image,
 		"--cpus", strconv.Itoa(opts.Cpus),
 		"--disk", opts.DiskSize,
 		"--memory", opts.Memory,
@@ -51,6 +53,7 @@ func Create() error {
 	cmd.Env = os.Environ()
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -69,6 +72,9 @@ func Delete() error {
 
 	cmd := exec.Command(opts.Path, "delete", machineId)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -87,6 +93,9 @@ func Init() error {
 	// as a way to check if multipass is available
 	cmd := exec.Command(opts.Path, "version")
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -105,6 +114,9 @@ func Start() error {
 
 	cmd := exec.Command(opts.Path, "start", machineId)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -123,6 +135,9 @@ func Status() error {
 
 	cmd := exec.Command(opts.Path, "info", machineId)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err
@@ -141,6 +156,9 @@ func Stop() error {
 
 	cmd := exec.Command(opts.Path, "stop", machineId)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
 	err = cmd.Run()
 	if err != nil {
 		return err

@@ -7,6 +7,17 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/options"
 )
 
+func Command() error {
+	return nil
+}
+
+func Create() error {
+	return nil
+}
+func Delete() error {
+	return nil
+}
+
 func Init() error {
 	multipassOptions, err := options.FromEnv()
 	if err != nil {
@@ -22,5 +33,17 @@ func Init() error {
 		return err
 	}
 
+	return nil
+}
+
+func Start() error {
+	return nil
+}
+
+func Status() error {
+	return nil
+}
+
+func Stop() error {
 	return nil
 }

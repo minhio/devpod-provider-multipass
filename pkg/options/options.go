@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-
-	"github.com/loft-sh/devpod/pkg/provider"
 )
 
 const (
@@ -60,11 +58,6 @@ func FromEnv() (*Options, error) {
 	}
 
 	return multipassOptions, nil
-}
-
-func (multipassOptions *Options) GetMachineId() string {
-	machine := provider.FromEnvironment()
-	return "devpod-" + machine.ID
 }
 
 func fromEnvOrError(name string) (string, error) {

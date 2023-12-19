@@ -49,6 +49,8 @@ func Create() error {
 		opts.Image,
 	)
 	cmd.Env = os.Environ()
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	err = cmd.Run()
 	if err != nil {
 		return err

@@ -20,8 +20,8 @@ type Options struct {
 	Path     string // Path to multipass binary
 	Image    string // --image arg passed into multipass launch command
 	Cpus     int    // --cpus arg passed into multipass launch command
-	DiskSize int    // --disk arg passed into multipass launch command
-	Memory   int    // --memory arg passed into multipass launch command
+	DiskSize string // --disk arg passed into multipass launch command
+	Memory   string // --memory arg passed into multipass launch command
 }
 
 func FromEnv() (*Options, error) {
@@ -49,22 +49,12 @@ func FromEnv() (*Options, error) {
 		return nil, err
 	}
 
-	diskSize, err := fromEnvOrError(MULTIPASS_DISK_SIZE)
+	multipassOptions.DiskSize, err = fromEnvOrError(MULTIPASS_DISK_SIZE)
 	if err != nil {
 		return nil, err
 	}
 
-	multipassOptions.DiskSize, err = strconv.Atoi(diskSize)
-	if err != nil {
-		return nil, err
-	}
-
-	memory, err := fromEnvOrError(MULTIPASS_MEMORY)
-	if err != nil {
-		return nil, err
-	}
-
-	multipassOptions.Memory, err = strconv.Atoi(memory)
+	multipassOptions.Memory, err = fromEnvOrError(MULTIPASS_MEMORY)
 	if err != nil {
 		return nil, err
 	}

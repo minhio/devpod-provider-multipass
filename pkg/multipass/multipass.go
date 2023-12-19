@@ -13,6 +13,8 @@ func Init() error {
 		return err
 	}
 
+	// execute 'multipass version' command
+	// as a way to check if multipass is available
 	cmd := exec.Command(multipassOptions.Path, "version")
 	cmd.Env = os.Environ()
 	err = cmd.Run()

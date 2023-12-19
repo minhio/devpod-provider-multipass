@@ -17,11 +17,11 @@ const (
 )
 
 type Options struct {
-	Path     string
-	Image    string
-	Cpus     int
-	DiskSize int
-	Memory   int
+	Path     string // Path to multipass binary
+	Image    string // --image arg passed into multipass launch command
+	Cpus     int    // --cpus arg passed into multipass launch command
+	DiskSize int    // --disk arg passed into multipass launch command
+	Memory   int    // --memory arg passed into multipass launch command
 }
 
 func FromEnv() (*Options, error) {

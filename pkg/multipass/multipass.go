@@ -117,6 +117,9 @@ func (m multipass) Exec(name string, command string) error {
 		command,
 	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
 	return cmd.Run()
 }
 

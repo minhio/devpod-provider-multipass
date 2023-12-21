@@ -47,8 +47,6 @@ func (m multipass) List() ([]instance, error) {
 		"--format", "json",
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, err
@@ -84,8 +82,6 @@ func (m multipass) Launch(name string, cpus int, disk string,
 		image,
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
 
@@ -94,8 +90,6 @@ func (m multipass) Start(name string) error {
 		"start", name,
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
 
@@ -104,8 +98,6 @@ func (m multipass) Stop(name string) error {
 		"stop", name,
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
 
@@ -125,8 +117,6 @@ func (m multipass) Exec(name string, command string) error {
 		command,
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }
 
@@ -135,7 +125,5 @@ func (m multipass) Version() error {
 		"version",
 	)
 	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
 	return cmd.Run()
 }

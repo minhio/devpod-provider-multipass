@@ -2,198 +2,140 @@ package multipass
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"os/exec"
 	"strconv"
-
-	"github.com/loft-sh/devpod/pkg/provider"
-	"github.com/minhio/devpod-provider-multipass/pkg/options"
 )
 
-var statusMap = map[string]string{
-	"Running":          "Running",
-	"Stopped":          "Stopped",
-	"Deleted":          "NotFound",
-	"Starting":         "Busy",
-	"Restarting":       "Busy",
-	"Delayed Shutdown": "Busy",
-	"Suspending":       "Busy",
-	"Suspended":        "Stopped",
-	"Unknown":          "NotFound",
+const (
+	RUNNING          = "Running"
+	STOPPED          = "Stopped"
+	DELETED          = "Deleted"
+	STARTING         = "Starting"
+	RESTARTING       = "Restarting"
+	DELAYED_SHUTDOWN = "Delayed Shutdown"
+	SUSPENDING       = "Suspending"
+	SUSPENDED        = "Suspended"
+	UNKNOWN          = "Unknown"
+)
+
+type multipass struct {
+	executablePath string
 }
 
-func Command() error {
-	devPodCommand := os.Getenv("COMMAND")
-	if devPodCommand == "" {
-		return fmt.Errorf("command environment variable is missing")
-	}
-
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
-
-	machine := provider.FromEnvironment()
-
-	// example: multipass exec devpod-abc123 -- echo "hello world"
-	cmd := exec.Command(opts.Path, "exec", machine.ID, "--", devPodCommand)
-	cmd.Env = os.Environ()
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+type instance struct {
+	Name  string
+	State string
 }
 
-func Create() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
+type listResult struct {
+	List []struct {
+		Ipv4    []string `json:"ipv4"`
+		Name    string   `json:"name"`
+		Release string   `json:"release"`
+		State   string   `json:"state"`
+	} `json:"list"`
+}
 
-	machine := provider.FromEnvironment()
+func NewMultipass(executablePath string) *multipass {
+	return &multipass{executablePath: executablePath}
+}
 
-	// example: multipass launch --cpus 2 --disk 40G --memory 2G --name devpod-abc123 lts
-	cmd := exec.Command(opts.Path, "launch",
-		"--cpus", strconv.Itoa(opts.Cpus),
-		"--disk", opts.DiskSize,
-		"--memory", opts.Memory,
-		"--name", machine.ID,
-		opts.Image,
+func (m multipass) List() ([]instance, error) {
+	cmd := exec.Command(m.executablePath,
+		"list",
+		"--format", "json",
 	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Run()
+	out, err := cmd.Output()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	var result listResult
+	err = json.Unmarshal(out, &result)
+	if err != nil {
+		return nil, err
+	}
+
+	instances := make([]instance, 0)
+	for _, item := range result.List {
+		inst := instance{
+			Name:  item.Name,
+			State: item.State,
+		}
+		instances = append(instances, inst)
+	}
+
+	return instances, nil
 }
 
-func Delete() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
+func (m multipass) Launch(name string, cpus int, disk string,
+	memory string, image string) error {
 
-	machine := provider.FromEnvironment()
-
-	// example: multipass delete devpod-abc123
-	cmd := exec.Command(opts.Path, "delete", machine.ID)
+	cmd := exec.Command(m.executablePath,
+		"launch",
+		"--name", name,
+		"--cpus", strconv.Itoa(cpus),
+		"--disk", disk,
+		"--memory", memory,
+		image,
+	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }
 
-func Init() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
-
-	// execute 'multipass version' command
-	// as a way to check if multipass is available
-	cmd := exec.Command(opts.Path, "version")
+func (m multipass) Start(name string) error {
+	cmd := exec.Command(m.executablePath,
+		"start", name,
+	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }
 
-func Start() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
-
-	machine := provider.FromEnvironment()
-
-	// example: multipass start devpod-abc123
-	cmd := exec.Command(opts.Path, "start", machine.ID)
+func (m multipass) Stop(name string) error {
+	cmd := exec.Command(m.executablePath,
+		"stop", name,
+	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	err = cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }
 
-func Status() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
-
-	machine := provider.FromEnvironment()
-
-	// example: multipass info --format json devpod-abc123
-	cmd := exec.Command(opts.Path, "info", "--format", "json", machine.ID)
+func (m multipass) Delete(name string) error {
+	cmd := exec.Command(m.executablePath,
+		"delete", "--purge", name,
+	)
 	cmd.Env = os.Environ()
-
-	output, err := cmd.Output()
-	if err != nil {
-		return err
-	}
-
-	var infoObj map[string]interface{}
-	err = json.Unmarshal(output, &infoObj)
-	if err != nil {
-		return err
-	}
-
-	info := infoObj["info"].(map[string]interface{})
-	primary := info["primary"].(map[string]interface{})
-	state := primary["state"].(string)
-
-	devPodStatus := statusMap[state]
-	fmt.Fprint(os.Stdout, devPodStatus)
-
-	return nil
+	return cmd.Run()
 }
 
-func Stop() error {
-	opts, err := options.FromEnv()
-	if err != nil {
-		return err
-	}
-
-	machine := provider.FromEnvironment()
-
-	// example: multipass stop devpod-abc123
-	cmd := exec.Command(opts.Path, "stop", machine.ID)
+func (m multipass) Exec(name string, command string) error {
+	cmd := exec.Command(m.executablePath,
+		"exec",
+		name,
+		"--",
+		command,
+	)
 	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
 
-	err = cmd.Run()
-	if err != nil {
-		return err
-	}
-
-	return nil
+func (m multipass) Version() error {
+	cmd := exec.Command(m.executablePath,
+		"version",
+	)
+	cmd.Env = os.Environ()
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	return cmd.Run()
 }

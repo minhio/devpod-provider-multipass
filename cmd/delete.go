@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
+	"github.com/minhio/devpod-provider-multipass/pkg/devpod"
 	"github.com/spf13/cobra"
 )
 
@@ -10,7 +10,7 @@ var deleteCmd = &cobra.Command{
 	Use:   "delete",
 	Short: "Delete an instance",
 	RunE: func(cmd *cobra.Command, args []string) error {
-		return multipass.Delete()
+		return devpod.Delete()
 	},
 }
 

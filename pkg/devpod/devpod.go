@@ -41,7 +41,6 @@ func Command() error {
 
 	machine := provider.FromEnvironment()
 
-	devPodCommand = fmt.Sprintf("sh -c \"%s\"", devPodCommand)
 	return multipass.NewMultipass(opts.Path).Exec(machine.ID, devPodCommand)
 }
 

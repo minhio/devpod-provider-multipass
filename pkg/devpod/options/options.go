@@ -23,16 +23,16 @@ type Options struct {
 }
 
 func FromEnv() (*Options, error) {
-	multipassOptions := &Options{}
+	opts := &Options{}
 
 	var err error
 
-	multipassOptions.Path, err = fromEnvOrError(MULTIPASS_PATH)
+	opts.Path, err = fromEnvOrError(MULTIPASS_PATH)
 	if err != nil {
 		return nil, err
 	}
 
-	multipassOptions.Image, err = fromEnvOrError(MULTIPASS_IMAGE)
+	opts.Image, err = fromEnvOrError(MULTIPASS_IMAGE)
 	if err != nil {
 		return nil, err
 	}
@@ -42,22 +42,22 @@ func FromEnv() (*Options, error) {
 		return nil, err
 	}
 
-	multipassOptions.Cpus, err = strconv.Atoi(cpus)
+	opts.Cpus, err = strconv.Atoi(cpus)
 	if err != nil {
 		return nil, err
 	}
 
-	multipassOptions.DiskSize, err = fromEnvOrError(MULTIPASS_DISK_SIZE)
+	opts.DiskSize, err = fromEnvOrError(MULTIPASS_DISK_SIZE)
 	if err != nil {
 		return nil, err
 	}
 
-	multipassOptions.Memory, err = fromEnvOrError(MULTIPASS_MEMORY)
+	opts.Memory, err = fromEnvOrError(MULTIPASS_MEMORY)
 	if err != nil {
 		return nil, err
 	}
 
-	return multipassOptions, nil
+	return opts, nil
 }
 
 func fromEnvOrError(name string) (string, error) {

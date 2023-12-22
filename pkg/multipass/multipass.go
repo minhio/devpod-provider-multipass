@@ -2,11 +2,10 @@ package multipass
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"os/exec"
 	"strconv"
-
-	"github.com/loft-sh/log"
 )
 
 const (
@@ -148,13 +147,11 @@ func (m multipass) Delete(name string) error {
 }
 
 func (m multipass) Exec(name string, command string) error {
-	log.Default.Debugf("exec command: %s", command)
-
 	cmd := exec.Command(m.executablePath,
 		"exec",
 		name,
 		"--",
-		command,
+		fmt.Sprintf("sh -c '%s'", command),
 	)
 	cmd.Env = m.env
 	cmd.Stdin = m.stdin

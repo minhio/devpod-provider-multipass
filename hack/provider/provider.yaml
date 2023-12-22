@@ -48,12 +48,8 @@ options:
   AGENT_PATH:
     description: The path where to inject the DevPod agent to.
     default: /home/ubuntu/.devpod/devpod
-  AGENT_DATA_PATH:
-    description: The path where to store the agent data.
-    default: /home/ubuntu/.devpod/agent
 agent:
   path: ${AGENT_PATH}
-  dataPath: ${AGENT_DATA_PATH}
   injectGitCredentials: ${INJECT_GIT_CREDENTIALS}
   injectDockerCredentials: ${INJECT_DOCKER_CREDENTIALS}
 binaries:

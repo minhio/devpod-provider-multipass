@@ -1,4 +1,4 @@
-package options
+package devpod
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ type Options struct {
 	Memory   string // --memory arg passed into multipass launch command
 }
 
-func FromEnv() (*Options, error) {
+func OptsFromEnv() (*Options, error) {
 	opts := &Options{}
 
 	var err error

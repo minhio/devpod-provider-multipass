@@ -2,7 +2,7 @@ package multipass
 
 import (
 	"encoding/json"
-	"os"
+	"io"
 	"os/exec"
 	"strconv"
 
@@ -23,6 +23,10 @@ const (
 
 type multipass struct {
 	executablePath string
+	env            []string
+	stdin          io.Reader
+	stdout         io.Writer
+	stderr         io.Writer
 }
 
 type instance struct {
@@ -39,8 +43,20 @@ type listResult struct {
 	} `json:"list"`
 }
 
-func NewMultipass(executablePath string) *multipass {
-	return &multipass{executablePath: executablePath}
+func NewMultipass(executablePath string, optsSetters ...OptionSetter) *multipass {
+	opts := &Options{}
+
+	for _, setter := range optsSetters {
+		setter(opts)
+	}
+
+	return &multipass{
+		executablePath: executablePath,
+		env:            opts.Env,
+		stdin:          opts.Stdin,
+		stdout:         opts.Stdout,
+		stderr:         opts.Stderr,
+	}
 }
 
 func (m multipass) List() ([]instance, error) {
@@ -48,7 +64,11 @@ func (m multipass) List() ([]instance, error) {
 		"list",
 		"--format", "json",
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, err
@@ -83,7 +103,11 @@ func (m multipass) Launch(name string, cpus int, disk string,
 		"--memory", memory,
 		image,
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }
 
@@ -91,7 +115,11 @@ func (m multipass) Start(name string) error {
 	cmd := exec.Command(m.executablePath,
 		"start", name,
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }
 
@@ -99,7 +127,11 @@ func (m multipass) Stop(name string) error {
 	cmd := exec.Command(m.executablePath,
 		"stop", name,
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }
 
@@ -107,7 +139,11 @@ func (m multipass) Delete(name string) error {
 	cmd := exec.Command(m.executablePath,
 		"delete", "--purge", name,
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }
 
@@ -120,10 +156,11 @@ func (m multipass) Exec(name string, command string) error {
 		"--",
 		command,
 	)
-	cmd.Env = os.Environ()
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }
 
@@ -131,6 +168,10 @@ func (m multipass) Version() error {
 	cmd := exec.Command(m.executablePath,
 		"version",
 	)
-	cmd.Env = os.Environ()
+	cmd.Env = m.env
+	cmd.Stdin = m.stdin
+	cmd.Stdout = m.stdout
+	cmd.Stderr = m.stderr
+
 	return cmd.Run()
 }

@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/loft-sh/devpod/pkg/provider"
-	"github.com/minhio/devpod-provider-multipass/pkg/devpod/options"
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
@@ -34,68 +33,100 @@ func Command() error {
 		return fmt.Errorf("command environment variable is missing")
 	}
 
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	return multipass.NewMultipass(opts.Path).Exec(machine.ID, devPodCommand)
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+		multipass.Stdin(os.Stdin),
+		multipass.Stdout(os.Stdout),
+		multipass.Stderr(os.Stderr),
+	)
+
+	return m.Exec(machine.ID, devPodCommand)
 }
 
 func Create() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	return multipass.NewMultipass(opts.Path).Launch(machine.ID, opts.Cpus,
-		opts.DiskSize, opts.Memory, opts.Image)
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	return m.Launch(machine.ID, opts.Cpus, opts.DiskSize, opts.Memory, opts.Image)
 }
 
 func Delete() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	return multipass.NewMultipass(opts.Path).Delete(machine.ID)
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	return m.Delete(machine.ID)
 }
 
 func Init() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
-	return multipass.NewMultipass(opts.Path).Version()
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	return m.Version()
 }
 
 func Start() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	return multipass.NewMultipass(opts.Path).Start(machine.ID)
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	return m.Start(machine.ID)
 }
 
 func Status() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	instances, err := multipass.NewMultipass(opts.Path).List()
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	instances, err := m.List()
 	if err != nil {
 		return err
 	}
@@ -113,12 +144,17 @@ func Status() error {
 }
 
 func Stop() error {
-	opts, err := options.FromEnv()
+	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
 	}
 
 	machine := provider.FromEnvironment()
 
-	return multipass.NewMultipass(opts.Path).Stop(machine.ID)
+	m := multipass.NewMultipass(
+		opts.Path,
+		multipass.Env(os.Environ()),
+	)
+
+	return m.Stop(machine.ID)
 }

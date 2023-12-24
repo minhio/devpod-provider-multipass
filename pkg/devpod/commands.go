@@ -83,7 +83,7 @@ func Create() error {
 	}
 
 	multipassClient := multipass.NewClient(
-		"multipass",
+		opts.Path,
 		multipass.Env(os.Environ()),
 	)
 

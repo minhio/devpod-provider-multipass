@@ -20,7 +20,7 @@ const (
 	UNKNOWN          = "Unknown"
 )
 
-type multipass struct {
+type client struct {
 	executablePath string
 	env            []string
 	stdin          io.Reader
@@ -31,6 +31,7 @@ type multipass struct {
 type instance struct {
 	Name  string
 	State string
+	Ipv4  []string
 }
 
 type listResult struct {
@@ -42,14 +43,22 @@ type listResult struct {
 	} `json:"list"`
 }
 
-func NewMultipass(executablePath string, optsSetters ...OptionSetter) *multipass {
+type InstanceNotFound struct {
+	name string
+}
+
+func (i *InstanceNotFound) Error() string {
+	return fmt.Sprintf("instance not found: %s", i.name)
+}
+
+func NewClient(executablePath string, optsSetters ...OptionSetter) *client {
 	opts := &Options{}
 
 	for _, setter := range optsSetters {
 		setter(opts)
 	}
 
-	return &multipass{
+	return &client{
 		executablePath: executablePath,
 		env:            opts.Env,
 		stdin:          opts.Stdin,
@@ -58,15 +67,15 @@ func NewMultipass(executablePath string, optsSetters ...OptionSetter) *multipass
 	}
 }
 
-func (m multipass) List() ([]instance, error) {
-	cmd := exec.Command(m.executablePath,
+func (c *client) List() ([]*instance, error) {
+	cmd := exec.Command(c.executablePath,
 		"list",
 		"--format", "json",
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -79,11 +88,12 @@ func (m multipass) List() ([]instance, error) {
 		return nil, err
 	}
 
-	instances := make([]instance, 0)
+	instances := make([]*instance, 0)
 	for _, item := range result.List {
-		inst := instance{
+		inst := &instance{
 			Name:  item.Name,
 			State: item.State,
+			Ipv4:  item.Ipv4,
 		}
 		instances = append(instances, inst)
 	}
@@ -91,84 +101,85 @@ func (m multipass) List() ([]instance, error) {
 	return instances, nil
 }
 
-func (m multipass) Launch(name string, cpus int, disk string,
-	memory string, image string) error {
+func (c *client) Launch(name string, cpus int, disk string,
+	memory string, cloudInit string, image string) error {
 
-	cmd := exec.Command(m.executablePath,
+	cmd := exec.Command(c.executablePath,
 		"launch",
 		"--name", name,
 		"--cpus", strconv.Itoa(cpus),
 		"--disk", disk,
 		"--memory", memory,
+		"--cloud-init", cloudInit,
 		image,
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	return cmd.Run()
 }
 
-func (m multipass) Start(name string) error {
-	cmd := exec.Command(m.executablePath,
+func (c *client) Start(name string) error {
+	cmd := exec.Command(c.executablePath,
 		"start", name,
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	return cmd.Run()
 }
 
-func (m multipass) Stop(name string) error {
-	cmd := exec.Command(m.executablePath,
+func (c *client) Stop(name string) error {
+	cmd := exec.Command(c.executablePath,
 		"stop", name,
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	return cmd.Run()
 }
 
-func (m multipass) Delete(name string) error {
-	cmd := exec.Command(m.executablePath,
+func (c *client) Delete(name string) error {
+	cmd := exec.Command(c.executablePath,
 		"delete", "--purge", name,
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	return cmd.Run()
 }
 
-func (m multipass) Exec(name string, command string) error {
-	cmd := exec.Command(m.executablePath,
-		"exec",
-		name,
-		"--",
-		fmt.Sprintf("sh -c '%s'", command),
-	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
-
-	return cmd.Run()
-}
-
-func (m multipass) Version() error {
-	cmd := exec.Command(m.executablePath,
+func (c *client) Version() error {
+	cmd := exec.Command(c.executablePath,
 		"version",
 	)
-	cmd.Env = m.env
-	cmd.Stdin = m.stdin
-	cmd.Stdout = m.stdout
-	cmd.Stderr = m.stderr
+	cmd.Env = c.env
+	cmd.Stdin = c.stdin
+	cmd.Stdout = c.stdout
+	cmd.Stderr = c.stderr
 
 	return cmd.Run()
+}
+
+func (c *client) GetInstance(name string) (*instance, error) {
+	instances, err := c.List()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, inst := range instances {
+		if inst.Name == name {
+			return inst, nil
+		}
+	}
+
+	return nil, &InstanceNotFound{name: name}
 }

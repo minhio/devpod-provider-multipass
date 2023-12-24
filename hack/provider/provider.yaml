@@ -47,7 +47,7 @@ options:
     default: "true"
   AGENT_PATH:
     description: The path where to inject the DevPod agent to.
-    default: /home/ubuntu/.devpod/devpod
+    default: /home/devpod/.devpod/devpod
 agent:
   path: ${AGENT_PATH}
   injectGitCredentials: ${INJECT_GIT_CREDENTIALS}

@@ -36,11 +36,11 @@ options:
     default: 2
     required: true
   MULTIPASS_DISK_SIZE:
-    description: Disk space to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 512M.
+    description: Disk space to allocate. Positive integers, in bytes, or with K, M, G suffix.. Minimum 512M.
     default: 40G
     required: true
   MULTIPASS_MEMORY:
-    description: mount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
+    description: Amount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
     default: 2G
     required: true
   INJECT_GIT_CREDENTIALS:

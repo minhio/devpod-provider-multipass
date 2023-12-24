@@ -2,8 +2,9 @@ name: multipass
 version: ##VERSION##
 description: |-
   DevPod on Canonical Multipass
-icon: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
-iconDark: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+home: https://github.com/minhio/devpod-provider-multipass
+icon: https://raw.githubusercontent.com/minhio/devpod-provider-multipass/main/multipass.svg
+iconDark: https://raw.githubusercontent.com/minhio/devpod-provider-multipass/main/multipass.svg
 optionGroups:
   - options:
       - MULTIPASS_IMAGE

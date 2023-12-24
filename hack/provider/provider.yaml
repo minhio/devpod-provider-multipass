@@ -1,0 +1,79 @@
+name: multipass
+version: ##VERSION##
+description: |-
+  DevPod on Canonical Multipass
+icon: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+iconDark: https://github.com/minhio/devpod-provider-multipass/blob/main/multipass.svg
+optionGroups:
+  - options:
+      - MULTIPASS_IMAGE
+      - MULTIPASS_CPUS
+      - MULTIPASS_DISK_SIZE
+      - MULTIPASS_MEMORY
+    name: "Multipass options"
+    defaultVisible: true
+  - options:
+      - MULTIPASS_PATH
+    name: "Multipass advanced options"
+    defaultVisible: false
+  - options:
+      - INJECT_DOCKER_CREDENTIALS
+      - INJECT_GIT_CREDENTIALS
+    name: "Agent options"
+    defaultVisible: false
+options:
+  MULTIPASS_PATH:
+    description: Path to multipass binary.
+    default: multipass
+  MULTIPASS_IMAGE:
+    description: Image to launch. If omitted, then the default Ubuntu LTS will be used.
+    default: lts
+  MULTIPASS_CPUS:
+    description: Number of CPUs to allocate.
+    default: 2
+  MULTIPASS_DISK_SIZE:
+    description: Disk space to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 512M.
+    default: 40G
+  MULTIPASS_MEMORY:
+    description: mount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
+    default: 2G
+  INJECT_GIT_CREDENTIALS:
+    description: "If DevPod should inject git credentials into the remote host."
+    default: "true"
+  INJECT_DOCKER_CREDENTIALS:
+    description: "If DevPod should inject docker credentials into the remote host."
+    default: "true"
+agent:
+  path: /home/devpod/.devpod/devpod
+  injectGitCredentials: ${INJECT_GIT_CREDENTIALS}
+  injectDockerCredentials: ${INJECT_DOCKER_CREDENTIALS}
+binaries:
+  MULTIPASS_PROVIDER:
+    - os: linux
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-amd64
+      checksum: ##CHECKSUM_LINUX_AMD64##
+    - os: linux
+      arch: arm64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-linux-arm64
+      checksum: ##CHECKSUM_LINUX_ARM64##
+    - os: darwin
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-darwin-amd64
+      checksum: ##CHECKSUM_DARWIN_AMD64##
+    - os: darwin
+      arch: arm64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-darwin-arm64
+      checksum: ##CHECKSUM_DARWIN_ARM64##
+    - os: windows
+      arch: amd64
+      path: https://github.com/minhio/devpod-provider-multipass/releases/download/##VERSION##/devpod-provider-multipass-windows-amd64.exe
+      checksum: ##CHECKSUM_WINDOWS_AMD64##
+exec:
+  init: ${MULTIPASS_PROVIDER} init
+  command: ${MULTIPASS_PROVIDER} command
+  create: ${MULTIPASS_PROVIDER} create
+  delete: ${MULTIPASS_PROVIDER} delete
+  start: ${MULTIPASS_PROVIDER} start
+  stop: ${MULTIPASS_PROVIDER} stop
+  status: ${MULTIPASS_PROVIDER} status

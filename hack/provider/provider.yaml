@@ -17,8 +17,6 @@ optionGroups:
     name: "Multipass advanced options"
     defaultVisible: false
   - options:
-      - AGENT_PATH
-      - AGENT_DATA_PATH
       - INJECT_DOCKER_CREDENTIALS
       - INJECT_GIT_CREDENTIALS
     name: "Agent options"
@@ -45,11 +43,8 @@ options:
   INJECT_DOCKER_CREDENTIALS:
     description: "If DevPod should inject docker credentials into the remote host."
     default: "true"
-  AGENT_PATH:
-    description: The path where to inject the DevPod agent to.
-    default: /home/devpod/.devpod/devpod
 agent:
-  path: ${AGENT_PATH}
+  path: /home/devpod/.devpod/devpod
   injectGitCredentials: ${INJECT_GIT_CREDENTIALS}
   injectDockerCredentials: ${INJECT_DOCKER_CREDENTIALS}
 binaries:

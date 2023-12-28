@@ -7,8 +7,8 @@
 The provider is available for auto-installation using 
 
 ```sh
-devpod provider add multipass
-devpod provider use multipass
+devpod provider add minhio/devpod-provider-multipass
+devpod provider use minhio/devpod-provider-multipass
 ```
 
 Follow the on-screen instructions to complete the setup.

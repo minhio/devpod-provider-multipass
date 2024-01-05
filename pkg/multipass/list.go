@@ -2,7 +2,8 @@ package multipass
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
+	"os"
 	"os/exec"
 )
 
@@ -19,14 +20,11 @@ func (c *client) List() (*listResult, error) {
 	args := []string{"list", "--format", "json"}
 
 	cmd := exec.Command(c.executablePath, args...)
-	cmd.Env = c.environ
-	cmd.Stdin = c.stdin
-	cmd.Stdout = c.stdout
-	cmd.Stderr = c.stderr
+	cmd.Env = os.Environ()
 
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return nil, errors.New(string(out) + "\n" + err.Error())
+		return nil, fmt.Errorf("%s %s", string(out), err.Error())
 	}
 
 	var result listResult

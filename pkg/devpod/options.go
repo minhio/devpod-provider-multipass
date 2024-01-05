@@ -15,7 +15,7 @@ const (
 )
 
 type Options struct {
-	Path     string // Path to multipass binary
+	Path     string // Path to multipass executable
 	Image    string // --image arg passed into multipass launch command
 	Cpus     int    // --cpus arg passed into multipass launch command
 	DiskSize string // --disk arg passed into multipass launch command

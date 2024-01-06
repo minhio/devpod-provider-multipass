@@ -1,4 +1,4 @@
-# Canonical Multipass provider for DevPod
+# [Canonical Multipass](https://multipass.run/) provider for [DevPod](https://github.com/loft-sh/devpod)
 
 [![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/minhio/devpod-provider-multipass)
 

@@ -30,7 +30,10 @@ func Command() error {
 	machine := provider.FromEnvironment()
 
 	// init multipass client
-	client := multipass.NewClient(opts.Path)
+	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
 
 	// get multipass instance info by machine ID (the instance name)
 	instance, err := client.GetInstance(machine.ID)

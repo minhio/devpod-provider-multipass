@@ -10,7 +10,10 @@ func Init() error {
 		return err
 	}
 
-	client := multipass.NewClient(opts.Path)
+	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
 
 	_, err = client.Version()
 	if err != nil {

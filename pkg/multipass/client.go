@@ -2,6 +2,7 @@ package multipass
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 )
 
@@ -9,10 +10,17 @@ type client struct {
 	executablePath string
 }
 
-func NewClient(executablePath string) *client {
-	return &client{
+func NewClient(executablePath string) (*client, error) {
+	_, err := exec.LookPath(executablePath)
+	if err != nil {
+		return nil, err
+	}
+
+	client := client{
 		executablePath: executablePath,
 	}
+
+	return &client, nil
 }
 
 func (c *client) GetInstance(name string) (*instanceInfo, error) {

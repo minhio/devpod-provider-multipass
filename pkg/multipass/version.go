@@ -13,7 +13,7 @@ type versionResult struct {
 }
 
 func (c *client) Version() (*versionResult, error) {
-	args := []string{"version"}
+	args := []string{"version", "--format", "json"}
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

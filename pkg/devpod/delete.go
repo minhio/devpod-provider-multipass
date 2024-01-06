@@ -12,7 +12,10 @@ func Delete() error {
 	}
 
 	machine := provider.FromEnvironment()
-	client := multipass.NewClient(opts.Path)
+	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
 
 	return client.Delete(machine.ID)
 }

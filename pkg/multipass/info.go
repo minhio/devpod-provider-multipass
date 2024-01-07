@@ -12,7 +12,6 @@ type mountInfo struct {
 }
 
 type instanceInfo struct {
-	Name   string
 	Ipv4   []string             `json:"ipv4"`
 	Mounts map[string]mountInfo `json:"mounts"`
 	State  string               `json:"state"`
@@ -37,10 +36,6 @@ func (c *client) Info(name string) (*infoResult, error) {
 	err = json.Unmarshal(out, &result)
 	if err != nil {
 		return nil, err
-	}
-
-	if instInfo, ok := result.Info[name]; ok {
-		instInfo.Name = name
 	}
 
 	return &result, nil

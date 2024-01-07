@@ -4,6 +4,9 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
+// devpod calls this when the provider is being added,
+// here we are just invoking the 'multipass version' command
+// as a way to ensure that multipass is reachable
 func Init() error {
 	opts, err := OptsFromEnv()
 	if err != nil {

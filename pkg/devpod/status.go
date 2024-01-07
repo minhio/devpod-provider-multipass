@@ -8,6 +8,8 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
+// devpod calls this to get the status of the multipass instance
+// and expect the response to be returned via stdout
 func Status() error {
 	opts, err := OptsFromEnv()
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
+// devpod calls this to stop the multipass instance
 func Stop() error {
 	opts, err := OptsFromEnv()
 	if err != nil {

@@ -5,6 +5,7 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
+// devpod calls this to start the multipass instance
 func Start() error {
 	opts, err := OptsFromEnv()
 	if err != nil {

@@ -11,10 +11,11 @@ import (
 	"github.com/pkg/errors"
 )
 
-// DevPod will use this command to inject itself into the environment and
+// devpod uses this to inject itself into the environment and
 // route all communication through the commands standard output and input.
 func Command() error {
-	// DevPod sets the command to be executed as an env var
+	// devpod sets the command to be executed as an env var
+	// here we are retrieving the command to be executed
 	devPodCommand := os.Getenv("COMMAND")
 	if devPodCommand == "" {
 		return errors.New("command environment variable is missing")

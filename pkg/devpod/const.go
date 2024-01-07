@@ -9,6 +9,8 @@ const (
 	BUSY     = "Busy"
 )
 
+// devpod expects four status above, multipass has nine
+// here we are mapping multipass instance status to what devpod expects
 var statusMap = map[string]string{
 	multipass.STATE_RUNNING:          RUNNING,
 	multipass.STATE_STOPPED:          STOPPED,

@@ -5,6 +5,7 @@ import (
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
+// devpod calls this to delete the multipass instance
 func Delete() error {
 	opts, err := OptsFromEnv()
 	if err != nil {

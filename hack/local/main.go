@@ -6,6 +6,9 @@ import (
 	"strings"
 )
 
+// calls from the /hack/build-local.sh script
+// this replaces the github path to the binaries in /release/provider.yaml
+// with the local path, useful for local development
 func main() {
 	content, err := os.ReadFile("./release/provider.yaml")
 	if err != nil {

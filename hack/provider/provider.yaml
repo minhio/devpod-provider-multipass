@@ -11,6 +11,7 @@ optionGroups:
       - MULTIPASS_CPUS
       - MULTIPASS_DISK_SIZE
       - MULTIPASS_MEMORY
+      - MULTIPASS_MOUNTS
     name: "Multipass options"
     defaultVisible: true
   - options:
@@ -43,6 +44,9 @@ options:
     description: Amount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
     default: 2G
     required: true
+  MULTIPASS_MOUNTS:
+    description: Comma separated list of host to multipass instance mounts in the format of "source:target". Relative target path will be mounted in the home directory. e.g. "~/.aws:/home/vscode/.aws,~/.config:.config".
+    required: false
   INJECT_GIT_CREDENTIALS:
     description: "If DevPod should inject git credentials into the remote host."
     default: "true"

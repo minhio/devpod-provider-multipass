@@ -13,6 +13,15 @@ func Init() error {
 		return err
 	}
 
+	// parse mount args
+	mounts := parseMountArgs(opts.Mounts)
+
+	// validate mount args
+	err = validateMountArgs(mounts...)
+	if err != nil {
+		return err
+	}
+
 	client, err := multipass.NewClient(opts.Path)
 	if err != nil {
 		return err

@@ -2,6 +2,7 @@ package devpod
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
@@ -11,7 +12,12 @@ import (
 func parseMountArgs(mountOpt string) []multipass.MountArg {
 	mountArgs := make([]multipass.MountArg, 0)
 
+	if mountOpt == "" {
+		return mountArgs
+	}
+
 	mountsFromOpt := strings.Split(mountOpt, ",")
+
 	for _, mount := range mountsFromOpt {
 		sourceAndTarget := strings.Split(mount, ":")
 
@@ -38,6 +44,8 @@ func parseMountArgs(mountOpt string) []multipass.MountArg {
 }
 
 func validateMountArgs(mountArgs ...multipass.MountArg) error {
+	log.Default().Print(mountArgs)
+
 	for _, arg := range mountArgs {
 		if _, err := os.Stat(arg.Source); os.IsNotExist(err) {
 			return fmt.Errorf("%s does not exist", arg.Source)

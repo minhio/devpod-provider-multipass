@@ -11,20 +11,27 @@ import (
 func parseMountArgs(mountOpt string) []multipass.MountArg {
 	mountArgs := make([]multipass.MountArg, 0)
 
-	mounts := strings.Split(mountOpt, ",")
-	for _, item := range mounts {
-		sourceAndTarget := strings.Split(item, ":")
-		if len(sourceAndTarget) == 2 {
-			source := sourceAndTarget[0]
-			target := sourceAndTarget[1]
-			if !strings.HasPrefix(target, "/") {
-				target = "/home/devpod/" + target
-			}
-			mountArgs = append(mountArgs, multipass.MountArg{
-				Source: source,
-				Target: target,
-			})
+	mountsFromOpt := strings.Split(mountOpt, ",")
+	for _, mount := range mountsFromOpt {
+		sourceAndTarget := strings.Split(mount, ":")
+
+		source := sourceAndTarget[0]
+		var target string
+
+		if len(sourceAndTarget) == 1 {
+			target = source
+		} else if len(sourceAndTarget) == 2 {
+			target = sourceAndTarget[1]
 		}
+
+		if !strings.HasPrefix(target, "/") {
+			target = "/home/devpod/" + target
+		}
+
+		mountArgs = append(mountArgs, multipass.MountArg{
+			Source: source,
+			Target: target,
+		})
 	}
 
 	return mountArgs

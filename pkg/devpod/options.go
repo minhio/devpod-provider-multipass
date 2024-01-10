@@ -59,6 +59,8 @@ func OptsFromEnv() (*Options, error) {
 		return nil, err
 	}
 
+	opts.Mounts = os.Getenv(MULTIPASS_MOUNTS)
+
 	return opts, nil
 }
 

@@ -2,6 +2,7 @@ package devpod
 
 import (
 	"encoding/base64"
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -27,6 +28,15 @@ users:
 func Create() error {
 	// get multipass options from env vars
 	opts, err := OptsFromEnv()
+	if err != nil {
+		return err
+	}
+
+	// parse mount args
+	mounts := parseMountArgs(opts.Mounts)
+
+	// validate mount args
+	err = validateMountArgs(mounts...)
 	if err != nil {
 		return err
 	}
@@ -71,7 +81,7 @@ func Create() error {
 	}
 
 	// launch the multipass instance
-	return client.Launch(
+	err = client.Launch(
 		multipass.SetLaunchName(machine.ID),
 		multipass.SetLaunchCpus(opts.Cpus),
 		multipass.SetLaunchDisk(opts.DiskSize),
@@ -79,4 +89,19 @@ func Create() error {
 		multipass.SetLaunchCloudInit(cloudInitFilePath),
 		multipass.SetLaunchImage(opts.Image),
 	)
+	if err != nil {
+		return err
+	}
+
+	// mounts
+	mountErr := client.Mount(machine.ID, mounts...)
+	if err != nil {
+		delErr := client.Delete(machine.ID)
+		if delErr != nil {
+			return errors.Join(mountErr, delErr)
+		}
+		return err
+	}
+
+	return nil
 }

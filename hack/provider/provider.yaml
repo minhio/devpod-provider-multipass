@@ -45,7 +45,7 @@ options:
     default: 2G
     required: true
   MULTIPASS_MOUNTS:
-    description: Comma separated list of host to multipass instance mounts in the format of "source:target". Relative target path will be mounted in the home directory. e.g. "~/.aws:/home/vscode/.aws,~/.config:.config".
+    description: Comma separated list of absolute host path to instance mounts in the format of "source:target". Relative target path will be mounted in the /home/vscode directory. e.g. both of these mounts are the same "/home/user/.aws:/home/vscode/.aws,/home/user/.aws:.aws".
     required: false
   INJECT_GIT_CREDENTIALS:
     description: "If DevPod should inject git credentials into the remote host."

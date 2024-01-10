@@ -3,6 +3,7 @@ package multipass
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -15,6 +16,8 @@ type versionResult struct {
 func (c *client) Version() (*versionResult, error) {
 	args := []string{"version", "--format", "json"}
 
+	log.Default().Printf("version args: %s", args)
+
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()
 
@@ -22,6 +25,8 @@ func (c *client) Version() (*versionResult, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s %s", string(out), err.Error())
 	}
+
+	log.Default().Printf("version result: %s", out)
 
 	var result versionResult
 	err = json.Unmarshal(out, &result)

@@ -2,6 +2,7 @@ package multipass
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"strings"
 )
@@ -11,6 +12,8 @@ type client struct {
 }
 
 func NewClient(executablePath string) (*client, error) {
+	log.Default().Printf("executable path: %s", executablePath)
+
 	_, err := exec.LookPath(executablePath)
 	if err != nil {
 		return nil, err
@@ -24,6 +27,8 @@ func NewClient(executablePath string) (*client, error) {
 }
 
 func (c *client) GetInstance(name string) (*instanceInfo, error) {
+	log.Default().Printf("get instance: %s", name)
+
 	infoResult, err := c.Info(name)
 	if err != nil {
 		if strings.Contains(err.Error(), fmt.Sprintf("instance \"%s\" does not exist", name)) {

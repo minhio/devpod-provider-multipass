@@ -2,6 +2,7 @@ package multipass
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -23,6 +24,8 @@ func (c *client) Mount(name string, mounts ...MountArg) error {
 
 func (c *client) mount(name string, mount MountArg) error {
 	args := []string{"mount", mount.Source, name + ":" + mount.Target}
+
+	log.Default().Printf("mount args: %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

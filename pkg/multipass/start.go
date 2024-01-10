@@ -2,12 +2,15 @@ package multipass
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
 
 func (c *client) Start(name string) error {
 	args := []string{"start", name}
+
+	log.Default().Printf("start args: %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

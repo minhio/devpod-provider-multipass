@@ -3,6 +3,7 @@ package multipass
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 )
@@ -19,6 +20,8 @@ type listResult struct {
 func (c *client) List() (*listResult, error) {
 	args := []string{"list", "--format", "json"}
 
+	log.Default().Printf("list args: %s", args)
+
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()
 
@@ -26,6 +29,8 @@ func (c *client) List() (*listResult, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s %s", string(out), err.Error())
 	}
+
+	log.Default().Printf("list result: %s", out)
 
 	var result listResult
 	err = json.Unmarshal(out, &result)

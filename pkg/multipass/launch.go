@@ -2,6 +2,7 @@ package multipass
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"strconv"
@@ -14,6 +15,7 @@ type launchArgs struct {
 	memory    string
 	cloudInit string
 	image     string
+	mounts    []MountArg
 }
 
 type argSetter func(*launchArgs)
@@ -47,9 +49,17 @@ func (c *client) Launch(argSetters ...argSetter) error {
 		args = append(args, "--cloud-init", launchArgz.cloudInit)
 	}
 
+	if len(launchArgz.mounts) > 0 {
+		for _, mount := range launchArgz.mounts {
+			args = append(args, "--mount", mount.Source+":"+mount.Target)
+		}
+	}
+
 	if launchArgz.image != "" {
 		args = append(args, launchArgz.image)
 	}
+
+	log.Default().Printf("launch args: %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()
@@ -95,5 +105,11 @@ func SetLaunchCloudInit(cloudInit string) argSetter {
 func SetLaunchImage(image string) argSetter {
 	return func(args *launchArgs) {
 		args.image = image
+	}
+}
+
+func SetMounts(mounts []MountArg) argSetter {
+	return func(args *launchArgs) {
+		args.mounts = mounts
 	}
 }

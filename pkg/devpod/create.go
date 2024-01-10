@@ -2,7 +2,6 @@ package devpod
 
 import (
 	"encoding/base64"
-	"errors"
 	"os"
 	"path/filepath"
 
@@ -52,12 +51,6 @@ func Create() error {
 		return err
 	}
 
-	// init multipass client
-	client, err := multipass.NewClient(opts.Path)
-	if err != nil {
-		return err
-	}
-
 	// generate and write public key (and private key) to machine folder
 	publicKeyBase, err := ssh.GetPublicKeyBase(machine.Folder)
 	if err != nil {
@@ -80,6 +73,12 @@ func Create() error {
 		return err
 	}
 
+	// init multipass client
+	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
+
 	// launch the multipass instance
 	err = client.Launch(
 		multipass.SetLaunchName(machine.ID),
@@ -87,19 +86,10 @@ func Create() error {
 		multipass.SetLaunchDisk(opts.DiskSize),
 		multipass.SetLaunchMemory(opts.Memory),
 		multipass.SetLaunchCloudInit(cloudInitFilePath),
+		multipass.SetMounts(mounts),
 		multipass.SetLaunchImage(opts.Image),
 	)
 	if err != nil {
-		return err
-	}
-
-	// mounts
-	mountErr := client.Mount(machine.ID, mounts...)
-	if err != nil {
-		delErr := client.Delete(machine.ID)
-		if delErr != nil {
-			return errors.Join(mountErr, delErr)
-		}
 		return err
 	}
 

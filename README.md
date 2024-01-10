@@ -22,7 +22,7 @@ Or the desktop app
 
 ## Customize the Multipass Instance
 
-This provides has the seguent options
+This provider has the following options
 
 | NAME                | REQUIRED | DESCRIPTION                                                     | DEFAULT   |
 |---------------------|----------|-----------------------------------------------------------------|-----------|

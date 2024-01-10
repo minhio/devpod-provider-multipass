@@ -2,7 +2,7 @@
 
 [![Open in DevPod!](https://devpod.sh/assets/open-in-devpod.svg)](https://devpod.sh/open#https://github.com/minhio/devpod-provider-multipass)
 
-## Pre-requisites
+## Prerequisites
 
 - Install [Multipass](https://multipass.run/install)
 - Install [DevPod](https://github.com/loft-sh/devpod)

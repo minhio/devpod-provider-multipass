@@ -15,14 +15,14 @@ import (
 // devpod uses this to inject itself into the environment and
 // route all communication through the commands standard output and input.
 func Command() error {
+	log.Default().Printf("[devpod] command")
+
 	// devpod sets the command to be executed as an env var
 	// here we are retrieving the command to be executed
 	devPodCommand := os.Getenv("COMMAND")
 	if devPodCommand == "" {
 		return errors.New("command environment variable is missing")
 	}
-
-	log.Default().Printf("[devpod] command: %s", devPodCommand)
 
 	// get multipass options from env vars
 	opts, err := OptsFromEnv()

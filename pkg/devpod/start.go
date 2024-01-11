@@ -1,6 +1,8 @@
 package devpod
 
 import (
+	"fmt"
+
 	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
@@ -14,6 +16,19 @@ func Start() error {
 
 	machine := provider.FromEnvironment()
 	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
+
+	err = client.Set(machine.ID, multipass.CPUS, fmt.Sprint(opts.Cpus))
+	if err != nil {
+		return err
+	}
+	err = client.Set(machine.ID, multipass.DISK, opts.DiskSize)
+	if err != nil {
+		return err
+	}
+	err = client.Set(machine.ID, multipass.MEMORY, opts.Memory)
 	if err != nil {
 		return err
 	}

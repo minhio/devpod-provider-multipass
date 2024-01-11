@@ -35,6 +35,8 @@ func Status() error {
 	}
 
 	status := statusMap[instance.State]
+
+	log.Default().Printf("[devpod] status: %s", status)
 	_, err = fmt.Fprint(os.Stdout, status)
 	return err
 }

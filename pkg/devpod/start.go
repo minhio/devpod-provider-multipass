@@ -28,6 +28,8 @@ func Start() error {
 		return err
 	}
 
+	log.Default().Printf("[devpod] instance state: %s", instance.State)
+
 	if instance.State == multipass.STATE_STOPPED {
 		err := client.Set(machine.ID, multipass.CPUS, fmt.Sprint(opts.Cpus))
 		if err != nil {

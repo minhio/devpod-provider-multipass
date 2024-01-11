@@ -17,7 +17,7 @@ func (c *client) Get(instanceName string, keyName string) (string, error) {
 	key := fmt.Sprintf("local.%s.%s", instanceName, keyName)
 	args := []string{"get", key}
 
-	log.Default().Printf("get args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()
@@ -27,7 +27,7 @@ func (c *client) Get(instanceName string, keyName string) (string, error) {
 		return "", fmt.Errorf("%s %s", string(out), err.Error())
 	}
 
-	log.Default().Printf("get result: %s", out)
+	log.Default().Printf("[multipass] %s: %s", keyName, out)
 
 	return string(out), nil
 }

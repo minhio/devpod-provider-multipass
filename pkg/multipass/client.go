@@ -12,7 +12,7 @@ type client struct {
 }
 
 func NewClient(executablePath string) (*client, error) {
-	log.Default().Printf("executable path: %s", executablePath)
+	log.Default().Printf("[multipass] path: %s", executablePath)
 
 	_, err := exec.LookPath(executablePath)
 	if err != nil {
@@ -27,16 +27,18 @@ func NewClient(executablePath string) (*client, error) {
 }
 
 func (c *client) GetInstance(name string) (*instanceInfo, error) {
-	log.Default().Printf("get instance: %s", name)
+	log.Default().Printf("[multipass] getting instance: %s", name)
 
 	infoResult, err := c.Info(name)
 	if err != nil {
 		if strings.Contains(err.Error(), fmt.Sprintf("instance \"%s\" does not exist", name)) {
+			log.Default().Printf("[multipass] instance not found: %s", name)
 			return nil, &InstanceNotFound{name: name}
 		}
 		return nil, err
 	}
 
 	instInfo := infoResult.Info[name]
+
 	return &instInfo, nil
 }

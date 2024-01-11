@@ -3,6 +3,7 @@ package devpod
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/loft-sh/devpod/pkg/provider"
@@ -20,6 +21,8 @@ func Command() error {
 	if devPodCommand == "" {
 		return errors.New("command environment variable is missing")
 	}
+
+	log.Default().Printf("[devpod] command: %s", devPodCommand)
 
 	// get multipass options from env vars
 	opts, err := OptsFromEnv()

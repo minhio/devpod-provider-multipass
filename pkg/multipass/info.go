@@ -25,7 +25,7 @@ type infoResult struct {
 func (c *client) Info(name string) (*infoResult, error) {
 	args := []string{"info", "--format", "json", name}
 
-	log.Default().Printf("info args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()
@@ -34,8 +34,6 @@ func (c *client) Info(name string) (*infoResult, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s %s", string(out), err.Error())
 	}
-
-	log.Default().Printf("info result: %s", out)
 
 	var result infoResult
 	err = json.Unmarshal(out, &result)

@@ -10,7 +10,7 @@ import (
 func (c *client) Stop(name string) error {
 	args := []string{"stop", name}
 
-	log.Default().Printf("stop args: %s", args)
+	log.Default().Printf("[multipass] args: %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

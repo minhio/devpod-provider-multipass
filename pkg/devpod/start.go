@@ -2,6 +2,7 @@ package devpod
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/loft-sh/devpod/pkg/provider"
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
@@ -9,6 +10,8 @@ import (
 
 // devpod calls this to start the multipass instance
 func Start() error {
+	log.Default().Printf("[devpod] start")
+
 	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
@@ -40,10 +43,5 @@ func Start() error {
 		}
 	}
 
-	status := statusMap[instance.State]
-	if status == STOPPED {
-		return client.Start(machine.ID)
-	}
-
-	return nil
+	return client.Start(machine.ID)
 }

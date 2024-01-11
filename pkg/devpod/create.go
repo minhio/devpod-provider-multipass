@@ -2,6 +2,8 @@ package devpod
 
 import (
 	"encoding/base64"
+	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -25,10 +27,31 @@ users:
 
 // devpod calls this to create the multipass instance
 func Create() error {
+	log.Default().Printf("[devpod] create")
+
+	// build the machine context from env vars
+	machine := provider.FromEnvironment()
+
 	// get multipass options from env vars
 	opts, err := OptsFromEnv()
 	if err != nil {
 		return err
+	}
+
+	// init multipass client
+	client, err := multipass.NewClient(opts.Path)
+	if err != nil {
+		return err
+	}
+
+	// only create instance if it doesn't exist
+	_, err = client.GetInstance(machine.ID)
+	if err != nil {
+		if _, ok := err.(*multipass.InstanceNotFound); !ok {
+			return err
+		}
+	} else {
+		return fmt.Errorf("instance %s already exist", machine.ID)
 	}
 
 	// parse mount args
@@ -39,9 +62,6 @@ func Create() error {
 	if err != nil {
 		return err
 	}
-
-	// build the machine context from env vars
-	machine := provider.FromEnvironment()
 
 	// create the machine folder where we will write the cloud-init.yaml
 	// and private/public key to
@@ -69,12 +89,6 @@ func Create() error {
 	// write cloud-init.yaml to machine folder
 	cloudInitFilePath := filepath.Join(machine.Folder, "cloud-init.yaml")
 	err = os.WriteFile(cloudInitFilePath, []byte(cloudInitStr), 0644)
-	if err != nil {
-		return err
-	}
-
-	// init multipass client
-	client, err := multipass.NewClient(opts.Path)
 	if err != nil {
 		return err
 	}

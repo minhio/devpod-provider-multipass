@@ -10,7 +10,7 @@ import (
 func (c *client) Start(name string) error {
 	args := []string{"start", name}
 
-	log.Default().Printf("start args: %s", args)
+	log.Default().Printf("[multipass] args: %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

@@ -2,7 +2,6 @@ package devpod
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -44,8 +43,6 @@ func parseMountArgs(mountOpt string) []multipass.MountArg {
 }
 
 func validateMountArgs(mountArgs ...multipass.MountArg) error {
-	log.Default().Print(mountArgs)
-
 	for _, arg := range mountArgs {
 		if _, err := os.Stat(arg.Source); os.IsNotExist(err) {
 			return fmt.Errorf("%s does not exist", arg.Source)
@@ -54,6 +51,5 @@ func validateMountArgs(mountArgs ...multipass.MountArg) error {
 			return fmt.Errorf("%s is not absolute path", arg.Target)
 		}
 	}
-
 	return nil
 }

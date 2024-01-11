@@ -2,6 +2,7 @@ package devpod
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/loft-sh/devpod/pkg/provider"
@@ -11,6 +12,8 @@ import (
 // devpod calls this to get the status of the multipass instance
 // and expect the response to be returned via stdout
 func Status() error {
+	log.Default().Printf("[devpod] status")
+
 	opts, err := OptsFromEnv()
 	if err != nil {
 		return err

@@ -1,6 +1,8 @@
 package devpod
 
 import (
+	"log"
+
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
@@ -8,6 +10,8 @@ import (
 // here we are just invoking the 'multipass version' command
 // as a way to ensure that multipass is reachable
 func Init() error {
+	log.Default().Printf("[devpod] init")
+
 	opts, err := OptsFromEnv()
 	if err != nil {
 		return err

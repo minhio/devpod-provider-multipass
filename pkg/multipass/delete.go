@@ -10,7 +10,7 @@ import (
 func (c *client) Delete(name string) error {
 	args := []string{"delete", "--purge", name}
 
-	log.Default().Printf("delete args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

@@ -59,7 +59,7 @@ func (c *client) Launch(argSetters ...argSetter) error {
 		args = append(args, launchArgz.image)
 	}
 
-	log.Default().Printf("launch args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

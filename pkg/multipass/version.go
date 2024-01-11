@@ -16,7 +16,7 @@ type versionResult struct {
 func (c *client) Version() (*versionResult, error) {
 	args := []string{"version", "--format", "json"}
 
-	log.Default().Printf("[multipass] args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

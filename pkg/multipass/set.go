@@ -11,7 +11,7 @@ func (c *client) Set(instanceName string, keyName string, value string) error {
 	key := fmt.Sprintf("local.%s.%s", instanceName, keyName)
 	args := []string{"set", key + "=" + value}
 
-	log.Default().Printf("[multipass] args: %s", args)
+	log.Default().Printf("[multipass] %s", args)
 
 	cmd := exec.Command(c.executablePath, args...)
 	cmd.Env = os.Environ()

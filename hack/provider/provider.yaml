@@ -32,18 +32,41 @@ options:
     description: Image to launch. If omitted, then the default Ubuntu LTS will be used.
     default: lts
     required: true
+    suggestions:
+      - lunar
+      - jammy
+      - focal
   MULTIPASS_CPUS:
     description: Number of CPUs to allocate.
     default: 2
     required: true
+    suggestions:
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
   MULTIPASS_DISK_SIZE:
     description: Disk space to allocate. Positive integers, in bytes, or with K, M, G suffix.. Minimum 512M.
     default: 40G
     required: true
+    suggestions:
+      - 20G
+      - 40G
+      - 60G
+      - 80G
+      - 100G
   MULTIPASS_MEMORY:
     description: Amount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
     default: 2G
     required: true
+    suggestions:
+      - 2G
+      - 4G
+      - 8G
+      - 12G
+      - 16G
   MULTIPASS_MOUNTS:
     description: Comma separated list of <absolute-local-path:instance-path>. Relative <instance-path> will be mounted in the /home/devpod directory. If <instance-path> is omitted, the mount point will be the same as the <absolute-local-path>.
     required: false

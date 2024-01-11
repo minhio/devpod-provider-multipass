@@ -20,18 +20,30 @@ func Start() error {
 		return err
 	}
 
-	err = client.Set(machine.ID, multipass.CPUS, fmt.Sprint(opts.Cpus))
-	if err != nil {
-		return err
-	}
-	err = client.Set(machine.ID, multipass.DISK, opts.DiskSize)
-	if err != nil {
-		return err
-	}
-	err = client.Set(machine.ID, multipass.MEMORY, opts.Memory)
+	instance, err := client.GetInstance(machine.ID)
 	if err != nil {
 		return err
 	}
 
-	return client.Start(machine.ID)
+	if instance.State == multipass.STATE_STOPPED {
+		err := client.Set(machine.ID, multipass.CPUS, fmt.Sprint(opts.Cpus))
+		if err != nil {
+			return err
+		}
+		err = client.Set(machine.ID, multipass.DISK, opts.DiskSize)
+		if err != nil {
+			return err
+		}
+		err = client.Set(machine.ID, multipass.MEMORY, opts.Memory)
+		if err != nil {
+			return err
+		}
+	}
+
+	status := statusMap[instance.State]
+	if status == STOPPED {
+		return client.Start(machine.ID)
+	}
+
+	return nil
 }

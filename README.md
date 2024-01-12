@@ -42,9 +42,9 @@ See [https://multipass.run/docs/launch-command](https://multipass.run/docs/launc
 
 Examples:
 
-- `/Users/minh/.config->/home/devpod/.config`: local path `/Users/minh/.config` mounts to instance path `/home/devpod/.config`
+- `/Users/minh/.aws->/home/devpod/.aws`: local path `/Users/minh/.aws` mounts to instance path `/home/devpod/.aws`
+  - `/Users/minh/.aws->.aws` is the same as above
 - `/Users/minh`: local path `/Users/minh` mounts to instance path `/Users/minh`
-- `/Users/minh/.aws->.aws`: local path `/Users/minh/.aws` mounts to instance path `/home/devpod/.aws`
 - `C:\Users\minh`: local path `C:\Users\minh` mounts to instance path `/home/devpod/C:/Users/minh`
 
 The `MULTIPASS_MOUNTS` option enable users to mount local path to devcontainer via the multipass instance.

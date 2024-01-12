@@ -35,22 +35,22 @@ This provider has the following options
 
 See [https://multipass.run/docs/launch-command](https://multipass.run/docs/launch-command) for more detailed description of options.
 
-`MULTIPASS_MOUNTS` is a comma separated list of `<absolute-local-path:instance-path>`.
+`MULTIPASS_MOUNTS` is a comma separated list of `/absolute/local/path->/instance/path`.
 
-- Relative `<instance-path>` will be mounted in the `/home/devpod` directory.
-- If `<instance-path>` is omitted, the mount point will be the same as the `<absolute-local-path>`.
+- Relative instance path will be mounted in the `/home/devpod` directory.
+- If instance path is omitted, the mount point will be the same as the local path.
 
 Examples:
 
-- `/Users/minh/.config:/home/devpod/.config` -> local path `/Users/minh/.config` to instance path `/home/devpod/.config`
-- `/Users/minh` -> local path `/Users/minh` to instance path `/Users/minh`
-- `/Users/minh/.aws:.aws` -> local path `/Users/minh/.aws` to instance path `/home/devpod/.aws`
+- `/Users/minh/.config->/home/devpod/.config`: local path `/Users/minh/.config` mounts to instance path `/home/devpod/.config`
+- `/Users/minh`: local path `/Users/minh` mounts to instance path `/Users/minh`
+- `/Users/minh/.aws->.aws`: local path `/Users/minh/.aws` mounts to instance path `/home/devpod/.aws`
 
 The `MULTIPASS_MOUNTS` option enable users to mount local path to devcontainer via the multipass instance.
 
-For example, to mount user's local `~/.aws` directory to the devcontainer:
+For example, to mount user's local `/Users/minh/.aws` directory to the devcontainer:
 
-- Set `MULTIPASS_MOUNTS`=`/Users/minh/.aws:/home/devpod/.aws`
+- Set `MULTIPASS_MOUNTS`=`/Users/minh/.aws->/home/devpod/.aws`
 - Configure devcontainer mounts
 
 ```json

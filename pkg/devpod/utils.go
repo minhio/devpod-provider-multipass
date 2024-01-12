@@ -17,7 +17,7 @@ func parseMountArgs(mountOpt string) ([]multipass.MountArg, error) {
 	mountArgs := make([]multipass.MountArg, 0)
 
 	for _, mount := range strings.Split(mountOpt, ",") {
-		sourceAndTarget := strings.Split(mount, ":")
+		sourceAndTarget := strings.Split(mount, "->")
 
 		source := filepath.Join(sourceAndTarget[0])
 		if _, err := os.Stat(source); os.IsNotExist(err) {

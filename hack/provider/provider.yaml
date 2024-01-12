@@ -73,7 +73,7 @@ options:
       - 12G
       - 16G
   MULTIPASS_MOUNTS:
-    description: Comma separated list of <absolute-local-path:instance-path>. Relative <instance-path> will be mounted in the /home/devpod directory. If <instance-path> is omitted, the mount point will be the same as the <absolute-local-path>.
+    description: Comma separated list of /absolute/local/path->/instance/path. Relative instance path will be mounted in the /home/devpod directory. If instance path is omitted, the mount point will be the same as the absolute local path.
     required: false
   INJECT_GIT_CREDENTIALS:
     description: "If DevPod should inject git credentials into the remote host."

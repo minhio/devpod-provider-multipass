@@ -51,7 +51,11 @@ func (c *client) Launch(argSetters ...argSetter) error {
 
 	if len(launchArgz.mounts) > 0 {
 		for _, mount := range launchArgz.mounts {
-			args = append(args, "--mount", mount.Source+":"+mount.Target)
+			if mount.Target == "" {
+				args = append(args, "--mount", mount.Source)
+			} else {
+				args = append(args, "--mount", mount.Source+":"+mount.Target)
+			}
 		}
 	}
 

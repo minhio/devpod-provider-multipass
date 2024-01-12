@@ -55,10 +55,7 @@ func Create() error {
 	}
 
 	// parse mount args
-	mounts := parseMountArgs(opts.Mounts)
-
-	// validate mount args
-	err = validateMountArgs(mounts...)
+	mounts, err := parseMountArgs(opts.Mounts)
 	if err != nil {
 		return err
 	}

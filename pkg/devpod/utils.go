@@ -3,34 +3,34 @@ package devpod
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/minhio/devpod-provider-multipass/pkg/multipass"
 )
 
-func parseMountArgs(mountOpt string) []multipass.MountArg {
-	mountArgs := make([]multipass.MountArg, 0)
-
+func parseMountArgs(mountOpt string) ([]multipass.MountArg, error) {
 	if mountOpt == "" {
-		return mountArgs
+		return nil, nil
 	}
 
-	mountsFromOpt := strings.Split(mountOpt, ",")
+	mountArgs := make([]multipass.MountArg, 0)
 
-	for _, mount := range mountsFromOpt {
+	for _, mount := range strings.Split(mountOpt, ",") {
 		sourceAndTarget := strings.Split(mount, ":")
 
-		source := sourceAndTarget[0]
-		var target string
-
-		if len(sourceAndTarget) == 1 {
-			target = source
-		} else if len(sourceAndTarget) == 2 {
-			target = sourceAndTarget[1]
+		source := filepath.Join(sourceAndTarget[0])
+		if _, err := os.Stat(source); os.IsNotExist(err) {
+			return nil, fmt.Errorf("%s does not exist", source)
 		}
 
-		if !strings.HasPrefix(target, "/") {
-			target = "/home/devpod/" + target
+		target := ""
+		if len(sourceAndTarget) == 2 {
+			if strings.HasPrefix(sourceAndTarget[1], "/") {
+				target = filepath.Join(sourceAndTarget[1])
+			} else {
+				target = filepath.Join("/", "home", "devpod", sourceAndTarget[1])
+			}
 		}
 
 		mountArgs = append(mountArgs, multipass.MountArg{
@@ -39,17 +39,5 @@ func parseMountArgs(mountOpt string) []multipass.MountArg {
 		})
 	}
 
-	return mountArgs
-}
-
-func validateMountArgs(mountArgs ...multipass.MountArg) error {
-	for _, arg := range mountArgs {
-		if _, err := os.Stat(arg.Source); os.IsNotExist(err) {
-			return fmt.Errorf("%s does not exist", arg.Source)
-		}
-		if !strings.HasPrefix(arg.Target, "/") {
-			return fmt.Errorf("%s is not absolute path", arg.Target)
-		}
-	}
-	return nil
+	return mountArgs, nil
 }

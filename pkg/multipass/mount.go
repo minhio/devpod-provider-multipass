@@ -23,7 +23,13 @@ func (c *client) Mount(name string, mounts ...MountArg) error {
 }
 
 func (c *client) mount(name string, mount MountArg) error {
-	args := []string{"mount", mount.Source, name + ":" + mount.Target}
+	args := make([]string, 0)
+
+	if mount.Target == "" {
+		args = append(args, "mount", mount.Source, name)
+	} else {
+		args = append(args, "mount", mount.Source, name+":"+mount.Target)
+	}
 
 	log.Default().Printf("[multipass] %s", args)
 

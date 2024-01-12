@@ -18,10 +18,7 @@ func Init() error {
 	}
 
 	// parse mount args
-	mounts := parseMountArgs(opts.Mounts)
-
-	// validate mount args
-	err = validateMountArgs(mounts...)
+	_, err = parseMountArgs(opts.Mounts)
 	if err != nil {
 		return err
 	}

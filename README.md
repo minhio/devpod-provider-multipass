@@ -38,13 +38,14 @@ See [https://multipass.run/docs/launch-command](https://multipass.run/docs/launc
 `MULTIPASS_MOUNTS` is a comma separated list of `/absolute/local/path->/instance/path`.
 
 - Relative instance path will be mounted in the `/home/devpod` directory.
-- If instance path is omitted, the mount point will be the same as the local path.
+- If instance path is omitted, the mount point will be the same as the local path. With the exception of windows, where it will be mounted in `/home/devpod`.
 
 Examples:
 
 - `/Users/minh/.config->/home/devpod/.config`: local path `/Users/minh/.config` mounts to instance path `/home/devpod/.config`
 - `/Users/minh`: local path `/Users/minh` mounts to instance path `/Users/minh`
 - `/Users/minh/.aws->.aws`: local path `/Users/minh/.aws` mounts to instance path `/home/devpod/.aws`
+- `C:\Users\minh`: local path `C:\Users\minh` mounts to instance path `/home/devpod/C:/Users/minh`
 
 The `MULTIPASS_MOUNTS` option enable users to mount local path to devcontainer via the multipass instance.
 

@@ -1,6 +1,8 @@
 package multipass
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type InstanceNotFound struct {
 	name string
@@ -8,4 +10,11 @@ type InstanceNotFound struct {
 
 func (i *InstanceNotFound) Error() string {
 	return fmt.Sprintf("instance not found: %s", i.name)
+}
+
+func IsInstanceNotFound(err error) bool {
+	if _, ok := err.(*InstanceNotFound); ok {
+		return true
+	}
+	return false
 }

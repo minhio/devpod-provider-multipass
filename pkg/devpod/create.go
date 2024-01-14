@@ -44,13 +44,13 @@ func Create() error {
 		return err
 	}
 
-	// only create instance if it doesn't exist
-	_, err = client.GetInstance(machine.ID)
+	instanceExists, err := client.IsInstanceExist(machine.ID)
 	if err != nil {
-		if _, ok := err.(*multipass.InstanceNotFound); !ok {
-			return err
-		}
-	} else {
+		return err
+	}
+
+	// only create instance if it doesn't exist
+	if instanceExists {
 		return fmt.Errorf("instance %s already exist", machine.ID)
 	}
 

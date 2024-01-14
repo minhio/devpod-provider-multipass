@@ -42,3 +42,14 @@ func (c *client) GetInstance(name string) (*instanceInfo, error) {
 
 	return &instInfo, nil
 }
+
+func (c *client) IsInstanceExist(name string) (bool, error) {
+	_, err := c.GetInstance(name)
+	if err != nil {
+		if IsInstanceNotFound(err) {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}

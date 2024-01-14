@@ -63,7 +63,7 @@ options:
       - 100G
   MULTIPASS_MEMORY:
     description: Amount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
-    default: 2G
+    default: 4G
     required: true
     global: true
     suggestions:

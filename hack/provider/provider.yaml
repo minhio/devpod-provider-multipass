@@ -40,11 +40,10 @@ options:
       - focal
   MULTIPASS_CPUS:
     description: Number of CPUs to allocate.
-    default: 2
+    default: 4
     required: true
     global: true
     suggestions:
-      - 1
       - 2
       - 3
       - 4
@@ -63,7 +62,7 @@ options:
       - 100G
   MULTIPASS_MEMORY:
     description: Amount of memory to allocate. Positive integers, in bytes, or decimals, with K, M, G suffix. Minimum 128M.
-    default: 4G
+    default: 8G
     required: true
     global: true
     suggestions:

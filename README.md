@@ -30,7 +30,7 @@ This provider has the following options
 | MULTIPASS_IMAGE     | true     | Image to launch.                | lts       |
 | MULTIPASS_CPUS      | true     | Number of CPUs to allocate.     | 2         |
 | MULTIPASS_DISK_SIZE | true     | Disk space to allocate.         | 40G       |
-| MULTIPASS_MEMORY    | true     | Amount of memory to allocate.   | 2G        |
+| MULTIPASS_MEMORY    | true     | Amount of memory to allocate.   | 4G        |
 | MULTIPASS_MOUNTS    | false    | Comma separated list of mounts. |           |
 
 See [https://multipass.run/docs/launch-command](https://multipass.run/docs/launch-command) for more detailed description of options.

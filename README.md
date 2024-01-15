@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-- Install [Multipass](https://multipass.run/install)
+- Install [Multipass](https://github.com/canonical/multipass)
 - Install [DevPod](https://github.com/loft-sh/devpod)
 
 ## Getting started

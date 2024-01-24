@@ -21,6 +21,10 @@ users:
 - default
 - name: devpod
   sudo: ALL=(ALL) NOPASSWD:ALL
+  shell: /bin/bash
+  groups:
+    - docker
+    - sudo
   ssh_authorized_keys:
     - ` + pubKey
 }
